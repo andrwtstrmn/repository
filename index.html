@@ -27,6 +27,10 @@
         <p id="already-played" class="already-played hidden">
           You already completed today's quiz! Score: <span id="prev-score"></span>/10
         </p>
+        <button id="btn-practice" class="btn btn-outline hidden">Another practice round?</button>
+        <p id="practice-done" class="already-played hidden">
+          Practice round complete! Score: <span id="prev-practice-score"></span>/10
+        </p>
       </div>
     </div>
 
@@ -49,7 +53,7 @@
     <!-- Results Screen -->
     <div id="screen-results" class="screen">
       <div class="card results-card">
-        <h2>Today's Results</h2>
+        <h2 id="results-title">Today's Results</h2>
         <div class="score-circle">
           <span class="score-number" id="final-score">0</span>
           <span class="score-label">out of 10</span>
@@ -60,6 +64,7 @@
           <span id="results-streak-count"></span> day streak!
         </div>
         <div class="results-breakdown" id="results-breakdown"></div>
+        <button id="btn-practice-results" class="btn btn-outline hidden">Another practice round?</button>
         <button id="btn-home" class="btn btn-secondary">Back to Home</button>
       </div>
     </div>

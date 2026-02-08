@@ -38,9 +38,9 @@
     });
   }
 
-  // --- Select 10 questions deterministically based on today's date ---
-  function selectDailyQuestions() {
-    var rng = mulberry32(getDateSeed());
+  // --- Select 10 questions deterministically based on a seed ---
+  function selectQuestions(seed) {
+    var rng = mulberry32(seed);
     var indices = [];
     for (var i = 0; i < QUESTIONS.length; i++) {
       indices.push(i);
@@ -57,6 +57,14 @@
       selected.push(QUESTIONS[indices[k]]);
     }
     return selected;
+  }
+
+  function selectDailyQuestions() {
+    return selectQuestions(getDateSeed());
+  }
+
+  function selectPracticeQuestions() {
+    return selectQuestions(getDateSeed() + 99999);
   }
 
   // --- Local Storage helpers ---
@@ -90,6 +98,17 @@
     saveData(data);
   }
 
+  function getPracticeResult() {
+    var data = loadData();
+    return data[getTodayKey() + "_practice"] || null;
+  }
+
+  function savePracticeResult(score, answers) {
+    var data = loadData();
+    data[getTodayKey() + "_practice"] = { score: score, answers: answers };
+    saveData(data);
+  }
+
   function calculateStreak() {
     var data = loadData();
     var streak = 0;
@@ -120,6 +139,11 @@
   var btnStart = document.getElementById("btn-start");
   var btnNext = document.getElementById("btn-next");
   var btnHome = document.getElementById("btn-home");
+  var btnPractice = document.getElementById("btn-practice");
+  var btnPracticeResults = document.getElementById("btn-practice-results");
+  var practiceDone = document.getElementById("practice-done");
+  var prevPracticeScore = document.getElementById("prev-practice-score");
+  var resultsTitle = document.getElementById("results-title");
 
   var todayDateEl = document.getElementById("today-date");
   var streakDisplay = document.getElementById("streak-display");
@@ -145,6 +169,7 @@
   var score = 0;
   var userAnswers = []; // stores {selected, correct, questionText, correctAnswer}
   var answered = false;
+  var isPractice = false;
 
   // --- Screen management ---
   function showScreen(screen) {
@@ -171,9 +196,22 @@
       alreadyPlayed.classList.remove("hidden");
       prevScore.textContent = todayResult.score;
       btnStart.textContent = "View Results";
+
+      // Show practice option
+      var practiceResult = getPracticeResult();
+      if (practiceResult) {
+        btnPractice.classList.add("hidden");
+        practiceDone.classList.remove("hidden");
+        prevPracticeScore.textContent = practiceResult.score;
+      } else {
+        btnPractice.classList.remove("hidden");
+        practiceDone.classList.add("hidden");
+      }
     } else {
       alreadyPlayed.classList.add("hidden");
       btnStart.textContent = "Start Today's Quiz";
+      btnPractice.classList.add("hidden");
+      practiceDone.classList.add("hidden");
     }
 
     showScreen(screenStart);
@@ -184,7 +222,7 @@
     var q = dailyQuestions[currentIndex];
     qCurrent.textContent = currentIndex + 1;
     progressFill.style.width = ((currentIndex / 10) * 100) + "%";
-    eraBadge.textContent = q.era + " \u00B7 " + q.year;
+    eraBadge.textContent = (isPractice ? "Practice \u00B7 " : "") + q.era + " \u00B7 " + q.year;
     questionText.textContent = q.question;
 
     choicesContainer.innerHTML = "";
@@ -258,7 +296,13 @@
 
   // --- Show results ---
   function showResults() {
-    saveTodayResult(score, userAnswers);
+    if (isPractice) {
+      savePracticeResult(score, userAnswers);
+      resultsTitle.textContent = "Practice Round Results";
+    } else {
+      saveTodayResult(score, userAnswers);
+      resultsTitle.textContent = "Today's Results";
+    }
 
     finalScore.textContent = score;
 
@@ -279,12 +323,24 @@
     else msgIndex = 5;
     scoreMessage.textContent = messages[msgIndex];
 
-    var streak = calculateStreak();
-    if (streak > 1) {
-      resultsStreak.classList.remove("hidden");
-      resultsStreakCount.textContent = streak;
-    } else {
+    if (isPractice) {
       resultsStreak.classList.add("hidden");
+      btnPracticeResults.classList.add("hidden");
+    } else {
+      var streak = calculateStreak();
+      if (streak > 1) {
+        resultsStreak.classList.remove("hidden");
+        resultsStreakCount.textContent = streak;
+      } else {
+        resultsStreak.classList.add("hidden");
+      }
+      // Show practice button on results if practice hasn't been done yet
+      var practiceResult = getPracticeResult();
+      if (practiceResult) {
+        btnPracticeResults.classList.add("hidden");
+      } else {
+        btnPracticeResults.classList.remove("hidden");
+      }
     }
 
     // Build breakdown
@@ -320,8 +376,21 @@
     showScreen(screenResults);
   }
 
+  // --- Start a practice round ---
+  function startPractice() {
+    isPractice = true;
+    dailyQuestions = selectPracticeQuestions();
+    currentIndex = 0;
+    score = 0;
+    userAnswers = [];
+
+    showScreen(screenQuiz);
+    renderQuestion();
+  }
+
   // --- Event listeners ---
   btnStart.addEventListener("click", function () {
+    isPractice = false;
     var todayResult = getTodayResult();
     if (todayResult) {
       // Rebuild state to show results
@@ -340,6 +409,9 @@
     showScreen(screenQuiz);
     renderQuestion();
   });
+
+  btnPractice.addEventListener("click", startPractice);
+  btnPracticeResults.addEventListener("click", startPractice);
 
   btnNext.addEventListener("click", function () {
     currentIndex++;

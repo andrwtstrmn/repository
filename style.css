@@ -113,6 +113,20 @@ header h1 {
   margin-top: 16px;
 }
 
+/* Practice round badge */
+.practice-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 /* Buttons */
 .btn {
   display: inline-block;
@@ -145,6 +159,17 @@ header h1 {
 
 .btn-secondary:hover {
   background: var(--blue);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  margin-top: 16px;
+}
+
+.btn-outline:hover {
+  background: rgba(218, 165, 32, 0.15);
 }
 
 /* Progress Bar */
