@@ -1,0 +1,374 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --blue: #1a3a5c;
+  --blue-light: #2c5f8a;
+  --red: #b22234;
+  --red-dark: #8b1a28;
+  --gold: #daa520;
+  --white: #f5f5f5;
+  --bg: #0f1c2e;
+  --card-bg: #1a2d45;
+  --text: #e8e8e8;
+  --text-muted: #8a9bb5;
+  --correct: #2e7d32;
+  --correct-bg: rgba(46, 125, 50, 0.15);
+  --wrong: #c62828;
+  --wrong-bg: rgba(198, 40, 40, 0.15);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  color: var(--white);
+  letter-spacing: 0.5px;
+}
+
+.date {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Screens */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Start Screen */
+.start-card {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.start-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.start-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.start-card p {
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.streak-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.streak-flame {
+  font-size: 1.3rem;
+}
+
+.already-played {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 16px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--red);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--red-dark);
+}
+
+.btn-secondary {
+  background: var(--blue-light);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: var(--blue);
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0;
+}
+
+.question-counter {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+/* Quiz Card */
+.quiz-card {
+  position: relative;
+}
+
+.era-badge {
+  display: inline-block;
+  background: var(--blue-light);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 0.3px;
+}
+
+.question-text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+/* Choices */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.choice-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+  line-height: 1.4;
+}
+
+.choice-btn:hover:not(.disabled) {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.choice-letter {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.choice-btn.correct {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+}
+
+.choice-btn.correct .choice-letter {
+  background: var(--correct);
+  color: white;
+}
+
+.choice-btn.wrong {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.choice-btn.wrong .choice-letter {
+  background: var(--wrong);
+  color: white;
+}
+
+.choice-btn.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.choice-btn.correct.disabled,
+.choice-btn.wrong.disabled {
+  opacity: 1;
+}
+
+#btn-next {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* Results Screen */
+.results-card {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.results-card h2 {
+  margin-bottom: 24px;
+}
+
+.score-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid var(--gold);
+  margin: 0 auto 20px;
+}
+
+.score-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.score-message {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  color: var(--text-muted);
+}
+
+.results-breakdown {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.result-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.9rem;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-top: 1px;
+}
+
+.result-question {
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.result-answer {
+  color: var(--text);
+  font-weight: 500;
+}
+
+#btn-home {
+  margin-top: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .app {
+    padding: 12px;
+  }
+
+  header h1 {
+    font-size: 1.25rem;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+}

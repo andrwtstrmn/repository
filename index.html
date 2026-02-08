@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily US History Trivia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Daily US History Trivia</h1>
+      <p class="date" id="today-date"></p>
+    </header>
+
+    <!-- Start Screen -->
+    <div id="screen-start" class="screen active">
+      <div class="card start-card">
+        <div class="start-icon">&#127466;&#127480;</div>
+        <h2>Today's 10 Questions</h2>
+        <p>Test your knowledge of American history from 1770 to present day. New questions every day!</p>
+        <div id="streak-display" class="streak-display hidden">
+          <span class="streak-flame">&#128293;</span>
+          <span id="streak-count"></span> day streak
+        </div>
+        <button id="btn-start" class="btn btn-primary">Start Today's Quiz</button>
+        <p id="already-played" class="already-played hidden">
+          You already completed today's quiz! Score: <span id="prev-score"></span>/10
+        </p>
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="screen-quiz" class="screen">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="question-counter">
+        Question <span id="q-current">1</span> of 10
+      </div>
+      <div class="card quiz-card">
+        <div class="era-badge" id="era-badge"></div>
+        <h2 class="question-text" id="question-text"></h2>
+        <div class="choices" id="choices"></div>
+        <button id="btn-next" class="btn btn-primary hidden">Next Question</button>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="screen-results" class="screen">
+      <div class="card results-card">
+        <h2>Today's Results</h2>
+        <div class="score-circle">
+          <span class="score-number" id="final-score">0</span>
+          <span class="score-label">out of 10</span>
+        </div>
+        <p class="score-message" id="score-message"></p>
+        <div id="results-streak" class="streak-display hidden">
+          <span class="streak-flame">&#128293;</span>
+          <span id="results-streak-count"></span> day streak!
+        </div>
+        <div class="results-breakdown" id="results-breakdown"></div>
+        <button id="btn-home" class="btn btn-secondary">Back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
